@@ -25,22 +25,63 @@ public class Exercicio02 {
         Scanner scanner = new Scanner(System.in);
 
         // Variaveis
-        float salarioBruto, premio, baseINSS, baseIR, rendimento, salarioLiquido;
+        float salarioBase, salarioLiquido, premio, rendimento, diferenca_rendimento_e_INSS, baseINSS, baseIR,
+                porcentagemDescontoINSS, porcentagemDescontoIR;
+        float descontoINSS = 0, descontoIR = 0;
 
         // Input user
         System.out.println("* Digite o salario bruto do funcionario: ");
-        salarioBruto = scanner.nextFloat();
+        salarioBase = scanner.nextFloat();
 
         System.out.println("* Digite o valor do premio do funcionario: ");
         premio = scanner.nextFloat();
 
-        System.out.println("* Digite a porcentagem de base do INSS: ");
+        System.out.println("* Digite o valor de base do INSS: ");
         baseINSS = scanner.nextFloat();
 
-        System.out.println("* Digite a porcentagem do Imposto de Renda: ");
+        System.out.println("* Digite a porcentagem de desconto do INSS: ");
+        porcentagemDescontoINSS = scanner.nextFloat();
+
+        System.out.println("* Digite o valor de base do Imposto de Renda: ");
         baseIR = scanner.nextFloat();
 
-        
-        
+        System.out.println("* Digite a porcentagem do Imposto de Renda: ");
+        porcentagemDescontoIR = scanner.nextFloat();
+
+        // logica
+        rendimento = salarioBase + premio;
+        salarioLiquido = rendimento;
+
+        if (rendimento > baseINSS) {
+            // calcula descontos
+            descontoINSS = salarioLiquido * (porcentagemDescontoINSS / 100);
+
+            /*
+             * esta variavel recebe o valor de diferenca entre rendimento e
+             * desconto do INSS. Mas tambem e o valor do salario pos desconto do
+             * INSS, por isso e utilizada logo a baixo para calcular o desconto do IR, ja
+             * que o IR so e calculado pos pagamento do INSS
+             */
+            diferenca_rendimento_e_INSS = rendimento - descontoINSS;
+
+            if (diferenca_rendimento_e_INSS > baseIR) {
+                // calcula descontos
+                descontoIR = diferenca_rendimento_e_INSS * (porcentagemDescontoIR / 100);
+            }
+        }
+
+        salarioLiquido = rendimento - descontoINSS - descontoIR;
+
+        // Print
+        System.out.println("""
+                    Demonstrativo pagamento:
+
+                    Salario Bruto.......: R$%.2f
+                    Premio..............: R$%.2f
+                    Rendimento..........: R$%.2f
+                    Desconto INSS.......: R$%.2f
+                    Desconto IR.........: R$%.2f
+                    Salario Liquido.....: R$%.2f
+                """.formatted(salarioBase, premio, rendimento, descontoINSS, descontoIR, salarioLiquido));
     }
 }
